@@ -1,14 +1,18 @@
 import { Given, When, Then } from '@cucumber/cucumber';
 import { expect } from 'chai';
-import { SignupPage } from '../pages/SignupPage';
-import { page } from '../support/world';
+import { SignupPage } from '../pages/SignupPage.js';
+import { page } from '../support/world.js';
+import { config } from '../utils/configs.js';
 
 let signupPage: SignupPage;
 let username: string;
 let password: string;
 
 Given('I open the Parabank website', async function () {
-    await page.goto('https://parabank.parasoft.com/parabank/index.htm?ConnType=JDBC');
+    await page.goto(config.baseUrl, { 
+        timeout: config.timeout,
+        waitUntil: 'networkidle'
+    });
 });
 
 When('I navigate to the Registration page', async function () {
@@ -16,9 +20,9 @@ When('I navigate to the Registration page', async function () {
     await signupPage.navigate();
 });
 
-When('I register a new user with valid details', async function () {
+When('I register a new user with valid details', { timeout: 30000 }, async function () {
     username = 'user' + Date.now();
-    password = 'Pass@123';
+    password = config.defaultPassword;
     await signupPage.registerUser(username, password);
 });
 
@@ -36,13 +40,13 @@ Then('I should see error messages for required fields', async function () {
     expect(errors.length).to.be.greaterThan(0);
 });
 
-When('I enter mismatched password and confirmation', async function () {
+When('I enter mismatched password and confirmation', { timeout: 30000 }, async function () {
     const uname = 'user' + Date.now();
-    const pwd = 'Pass@123';
+    const pwd = config.defaultPassword;
     await signupPage.registerWithMismatchedPasswords(uname, pwd);
 });
 
 Then('I should see an error for password mismatch', async function () {
     const errors = await signupPage.getErrorMessages();
-    expect(errors.some((e: any) => e.includes("Passwords do not match"))).to.be.true;
+    expect(errors.some((e: any) => e.includes("Passwords did not match"))).to.be.true;
 });

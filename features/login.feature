@@ -9,7 +9,7 @@ Feature: Parabank User Login
   Scenario: Login with empty fields
     Given I open the Parabank website
     When I try to login with empty username and password
-    Then I should see error messages for required fields
+    Then I should see login error messages for required fields
 
   Scenario: Login with invalid credentials
     Given I open the Parabank website

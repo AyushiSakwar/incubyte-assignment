@@ -8,13 +8,27 @@ let page: Page;
 class CustomWorld {
     page!: Page;
     async openBrowser() {
-        browser = await chromium.launch({ headless: false });
-        context = await browser.newContext();
-        page = await context.newPage();
-        this.page = page;
+        try {
+            browser = await chromium.launch({ 
+                headless: false,
+                timeout: 30000
+            });
+            context = await browser.newContext();
+            page = await context.newPage();
+            this.page = page;
+        } catch (error) {
+            console.error('Browser setup failed:', error);
+            throw error;
+        }
     }
     async closeBrowser() {
-        await browser.close();
+        try {
+            if (browser) {
+                await browser.close();
+            }
+        } catch (error) {
+            console.error('Browser cleanup failed:', error);
+        }
     }
 }
 
