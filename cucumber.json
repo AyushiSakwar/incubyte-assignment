@@ -1,7 +1,7 @@
 {
     "default": {
         "format": [
-            "progress",
+            "pretty",
             "json:reports/cucumber_report.json",
             "html:reports/cucumber-html-report"
         ],
