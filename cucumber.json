@@ -1,0 +1,19 @@
+{
+    "default": {
+        "format": [
+            "progress",
+            "json:reports/cucumber_report.json",
+            "html:reports/cucumber-html-report"
+        ],
+        "paths": [
+            "features/*.feature"
+        ],
+        "import": [
+            "steps/**/*.ts",
+            "support/**/*.ts"
+        ],
+        "publishQuiet": true,
+        "timeout": 30000,
+        "stepTimeout": 30000
+    }
+}
